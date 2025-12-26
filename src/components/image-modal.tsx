@@ -124,7 +124,7 @@ export default function ImageModal({
           visibility: "hidden",
         }}
       >
-        <p className="text-white">{album.description}</p>
+        <p className="text-white ">{album.description}</p>
       </div>
     </div>
   );

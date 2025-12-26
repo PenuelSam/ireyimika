@@ -57,7 +57,7 @@ export default function VideoModal({
       onClick={onClose}
     >
       <div
-        className="md:w-[80vw] w-full md:h-[70vh] md:max-h-[70vh] max-h-[55vh] aspect-video bg-black/50 rounded-lg"
+        className="md:w-[80vw] w-full md:h-[70vh] md:max-h-[70vh] max-h-[50vh] aspect-video bg-black/50 rounded-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <video
@@ -98,7 +98,7 @@ export default function VideoModal({
           visibility: "hidden",
         }}
       >
-        <p className="text-white">{description}</p>
+        <p className="text-white  ">{description}</p>
       </div>
     </div>
   );
