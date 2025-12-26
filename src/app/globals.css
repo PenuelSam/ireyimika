@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+/* Hide scrollbar but keep scrolling */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
+}
+html,
+body,
+.lenis {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.lenis::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  overflow-x: hidden;
+  background: #000;
+}
+
+
+/* Each section fills the viewport */
+.section {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  /* justify-content: center;
+  align-items: center; */
+  font-size: 4rem;
+  font-weight: bold;
+  scroll-snap-align: start; /* Optional, fallback for native snap */
+}
