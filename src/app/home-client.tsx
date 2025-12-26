@@ -74,7 +74,7 @@ export default function HomeClient({  projects, videos }: { projects: ProjectIte
         />
       )}
 
-      <section className="h-screen flex flex-col justify-center items-start bg-black text-white  md:px-12">
+      <section className="h-screen flex flex-col justify-center items-start bg-black text-white">
         <InquirySection />
       </section>
     </main>

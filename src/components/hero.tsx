@@ -14,6 +14,7 @@ const Hero = () => {
   "Engage Space",
   "Redlight Fashion Room",
   "Saint Moriartyy",
+  "Section Studio"
 ];
 
   

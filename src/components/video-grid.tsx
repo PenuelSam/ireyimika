@@ -78,7 +78,7 @@ export default function VideoSlider({
         
         <div className="absolute top-24 left-6 md:left-12 text-white z-20">
           <h2 className="text-[18px] font-bold mb-2 uppercase">Stories in Motion</h2>
-          <p className="text-sm w-[80%] leading-relaxed">
+          <p className="text-sm w-[80%] md:w-full leading-relaxed">
     A selection of visual narratives crafted for brands, spaces, and culture.
   </p>
           <p className="text-gray-400 text-sm">Scroll driven sequence</p>
