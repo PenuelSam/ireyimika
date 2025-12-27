@@ -6,6 +6,7 @@ export async function getProjectsWithMedia() {
     .from("projects")
     .select(`
       id,
+      slug,
       title,
       description,
       videos (

@@ -16,14 +16,14 @@ const content: Record<string, string[]> = {
     "My work exists at the intersection of visual storytelling and strategy. I’m less interested in chasing the next viral moment and more focused on how quiet, intentional stories can shape culture and behavior over time. Currently, I bring this perspective to The Section Studio as Head of Partnerships and Co-Creative Director, where I bridge the gap between creative vision and strategic alignment. For me, the goal is always the same: work that feels human, considered, and clear.",
   ],
  early: [
-    "Before I ever had a formal title, I had observation. I spent my early years simply watching how people reacted to images—noticing how silence often carries more weight than an explanation, or how a specific rhythm can shift an emotion without a word being said.",
+    "Before I ever had a formal title, I had observation. I spent my early years simply watching how people reacted to images, noticing how silence often carries more weight than an explanation, or how a specific rhythm can shift an emotion without a word being said.",
 
-    "Photography and video became my first language, offering a way to understand the world without needing to over-define it. My path wasn’t a straight line; it was driven by a mix of self-study and a deep curiosity for psychology and philosophy. By focusing on the process rather than the performance, I’ve been able to move from pure execution into intentional creative direction. Today, that visual discipline still guides my eye, but strategy and intent are what lead the way",
+    "Photography and video became my first language, offering a way to understand the world without needing to over define it. My path wasn’t a straight line; it was driven by a mix of self-study and a deep curiosity for psychology and philosophy. By focusing on the process rather than the performance, I’ve been able to move from pure execution into intentional creative direction. Today, that visual discipline still guides my eye, but strategy and intent are what lead the way",
   ],
   career: [
-    "Currently, I serve as the Head of Partnerships & Collaborations and Co-Creative Director at The Section Studio. In this dual role, I work at the intersection of relationships and execution—identifying brand partnerships that actually align with our vision and ensuring that every story we tell has a clear purpose.",
+    "Currently, I serve as the Head of Partnerships & Collaborations and Co-Creative Director at The Section Studio. In this dual role, I work at the intersection of relationships and execution, identifying brand partnerships that actually align with our vision and ensuring that every story we tell has a clear purpose.",
 
-    "Parallel to my work at the studio, I’m documenting my own evolution from a visual creator into a strategist and marketer. I’m deeply interested in the mechanics of brand trust and how creative decisions influence perception over the long term. I don’t see myself as a finished product, but as someone ‘becoming’—a strategist who understands visuals because I lived inside them first, and a director who values the ‘why’ as much as the ‘how’.",
+    "Parallel to my work at the studio, I’m documenting my own evolution from a visual creator into a strategist and marketer. I’m deeply interested in the mechanics of brand trust and how creative decisions influence perception over the long term. I don’t see myself as a finished product, but as someone ‘becoming’ a strategist who understands visuals because I lived inside them first, and a director who values the ‘why’ as much as the ‘how’.",
   ],
  
 };
@@ -56,7 +56,7 @@ export default function About() {
 
   return (
     <div className="flex flex-col">
-      <h2 className=" font-semibold mb-8 text-[18px]">ABOUT</h2>
+      <h2 className=" font-semibold mb-8 text-[18px] text-white">ABOUT</h2>
 
       {/* Tabs */}
       <div className="flex flex-wrap gap-3 mb-15">
@@ -74,7 +74,7 @@ export default function About() {
                 ${
                   isActive
                     ? "bg-[#1f1e1e] text-white"
-                    : "bg-black text-[#919498] hover:text-black"
+                    : "bg-black text-gray-400 hover:text-black"
                 }
                 hover:bg-[#1f1e1e] hover:text-white
                 hover:-translate-y-0.5
@@ -96,7 +96,7 @@ export default function About() {
             {content[activeTab].map((paragraph, index) => (
                 <p
                     key={index}
-                    className="text-[#919498] text-[14px] leading-relaxed"
+                    className="text-gray-400 text-[14px] leading-relaxed"
                 >
                     {paragraph}
                 </p>
