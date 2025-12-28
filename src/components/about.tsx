@@ -56,7 +56,7 @@ export default function About() {
 
   return (
     <div className="flex flex-col">
-      <h2 className=" font-semibold mb-8 text-[18px] text-white">ABOUT</h2>
+      <h2 className="  text-2xl md:text-4xl font-bold mb-8 text-white">ABOUT</h2>
 
       {/* Tabs */}
       <div className="flex flex-wrap gap-3 mb-15">
@@ -89,14 +89,14 @@ export default function About() {
       {/* Content */}
       <div className="max-w-3xl overflow-hidden">
         <div ref={contentRef}>
-        <h3  className="text-[16px] text-white font-semibold mb-4 capitalize">
+        <h3  className="text-[18px] text-white font-semibold mb-4 capitalize">
           {tabs.find((t) => t.id === activeTab)?.label}
         </h3>
         <div className="space-y-4">
             {content[activeTab].map((paragraph, index) => (
                 <p
                     key={index}
-                    className="text-gray-400 text-[14px] leading-relaxed"
+                    className="text-gray-400 text-[16px] leading-[1.6]"
                 >
                     {paragraph}
                 </p>

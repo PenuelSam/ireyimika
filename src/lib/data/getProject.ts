@@ -23,10 +23,11 @@ export async function getProjectsWithMedia() {
     .order("sort_order", { foreignTable: "images", ascending: true });
 
   if (error) {
-    console.log(error)
+    throw error
+    // console.log(error)
     return []
   }
 
-  console.log(data)
+  // console.log(data)
   return data || [];
 }

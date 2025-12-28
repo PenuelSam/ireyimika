@@ -4,22 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Image from "next/image";
 
-type Videos = {
-  id: string;
-  video_url: string;
-};
-
 type Images = {
   id: string;
   image_url: string;
-};
-
-type Project = {
-  id: string;
-  title: string;
-  description?: string;
-  images: Images[];
-  videos: Videos[];
 };
 
 type Album = {
@@ -41,6 +28,8 @@ export default function ImageModal({
   const sliderRef = useRef<HTMLDivElement>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
   const activeDotRef = useRef<HTMLDivElement>(null);
+  const [cursor, setCursor] = useState<"grab" | "grabbing">("grab");
+
 
   const [index, setIndex] = useState(startIndex);
   const [showDesc, setShowDesc] = useState(false);
@@ -54,15 +43,25 @@ export default function ImageModal({
   const slideWidth = useRef(0);
   const totalSlides = album.images.length;
 
+  /* ---------------- INIT + RESPONSIVE WIDTH ---------------- */
   useEffect(() => {
+    const setWidth = () => {
+      slideWidth.current = Math.min(window.innerWidth * 0.9, 1200);
+    };
+
+    setWidth();
+    window.addEventListener("resize", setWidth);
+
     gsap.fromTo(
       overlayRef.current,
       { opacity: 0 },
       { opacity: 1, duration: 0.35, ease: "power2.out" }
     );
-    slideWidth.current = window.innerWidth * 0.9;
+
+    return () => window.removeEventListener("resize", setWidth);
   }, []);
 
+  /* ---------------- TOUCH (MOBILE) ---------------- */
   const touchStart = (e: React.TouchEvent) => {
     startX.current = e.touches[0].clientX;
     startTime.current = Date.now();
@@ -71,7 +70,41 @@ export default function ImageModal({
 
   const touchMove = (e: React.TouchEvent) => {
     if (!isDragging.current) return;
+
     const dx = e.touches[0].clientX - startX.current;
+    handleDrag(dx);
+  };
+
+  const touchEnd = () => {
+    handleRelease();
+  };
+
+  /* ---------------- MOUSE (DESKTOP) ---------------- */
+  const mouseStart = (e: React.MouseEvent) => {
+  e.preventDefault();
+  startX.current = e.clientX;
+  startTime.current = Date.now();
+  isDragging.current = true;
+  setCursor("grabbing");
+};
+
+  const mouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current) return;
+
+    const dx = e.clientX - startX.current;
+    handleDrag(dx);
+  };
+
+const mouseEnd = () => {
+  if (!isDragging.current) return;
+  isDragging.current = false;
+  setCursor("grab");
+  handleRelease();
+};
+
+
+  /* ---------------- SHARED DRAG LOGIC ---------------- */
+  const handleDrag = (dx: number) => {
     let move = prevTranslate.current + dx;
 
     // Edge resistance
@@ -80,56 +113,59 @@ export default function ImageModal({
 
     currentTranslate.current = move;
 
-    if (sliderRef.current) gsap.set(sliderRef.current, { x: currentTranslate.current });
+    if (sliderRef.current) {
+      gsap.set(sliderRef.current, { x: move });
+    }
 
-    // Liquid active dot
+    // Liquid pagination
     if (paginationRef.current && activeDotRef.current) {
-      const dots = paginationRef.current.querySelectorAll<HTMLDivElement>("div:not(.active-dot)");
-      if (dots.length === 0) return;
+      const dots = paginationRef.current.querySelectorAll<HTMLDivElement>(
+        "div:not(.active-dot)"
+      );
+      if (!dots.length) return;
 
-      const firstDot = dots[0];
-      const gap = parseFloat(getComputedStyle(paginationRef.current).columnGap || "12");
-      const dotWidth = firstDot.offsetWidth;
+      const gap = parseFloat(
+        getComputedStyle(paginationRef.current).columnGap || "12"
+      );
+      const dotWidth = dots[0].offsetWidth;
 
-      // Ratio between 0 and 1 for current swipe progress
-      const ratio = -currentTranslate.current / (slideWidth.current * (totalSlides - 1));
+      const ratio =
+        -currentTranslate.current / (slideWidth.current * (totalSlides - 1));
       const exactPos = ratio * (totalSlides - 1) * (dotWidth + gap);
 
-      gsap.set(activeDotRef.current, { x: exactPos });
-
-      // Stretch effect
-      const fractional = (exactPos / (dotWidth + gap)) % 1; // progress between two dots
-      const scaleX = 1 + fractional * 1.5; // stretch up to 2.5x
-      gsap.set(activeDotRef.current, { scaleX });
+      gsap.set(activeDotRef.current, {
+        x: exactPos,
+        scaleX: 1 + ((exactPos / (dotWidth + gap)) % 1) * 1.5,
+      });
     }
   };
 
-  const touchEnd = () => {
+  const handleRelease = () => {
+    if (!isDragging.current) return;
     isDragging.current = false;
+
     const dx = currentTranslate.current - prevTranslate.current;
-    const dt = (Date.now() - startTime.current) / 1000; // seconds
-    const velocity = dx / dt; // px/sec
+    const dt = (Date.now() - startTime.current) / 1000;
+    const velocity = dx / dt;
 
     const threshold = slideWidth.current / 4;
     let newIndex = index;
 
-    if (velocity < -1000 && index < totalSlides - 1) {
-      newIndex = Math.min(totalSlides - 1, index + Math.ceil(Math.abs(velocity) / 1000));
-    } else if (velocity > 1000 && index > 0) {
-      newIndex = Math.max(0, index - Math.ceil(Math.abs(velocity) / 1000));
-    } else {
-      if (dx < -threshold && index < totalSlides - 1) newIndex = index + 1;
-      else if (dx > threshold && index > 0) newIndex = index - 1;
+    if (velocity < -1000 && index < totalSlides - 1) newIndex++;
+    else if (velocity > 1000 && index > 0) newIndex--;
+    else {
+      if (dx < -threshold && index < totalSlides - 1) newIndex++;
+      if (dx > threshold && index > 0) newIndex--;
     }
 
     setIndex(newIndex);
   };
 
+  /* ---------------- SNAP ANIMATION ---------------- */
   useEffect(() => {
     const offset = -index * slideWidth.current;
     prevTranslate.current = offset;
 
-    // Animate slider
     if (sliderRef.current) {
       gsap.to(sliderRef.current, {
         x: offset,
@@ -138,25 +174,27 @@ export default function ImageModal({
       });
     }
 
-    // Animate active dot snap
     if (paginationRef.current && activeDotRef.current) {
-      const dots = paginationRef.current.querySelectorAll<HTMLDivElement>("div:not(.active-dot)");
-      if (dots.length === 0) return;
+      const dots = paginationRef.current.querySelectorAll<HTMLDivElement>(
+        "div:not(.active-dot)"
+      );
+      if (!dots.length) return;
 
-      const firstDot = dots[0];
-      const gap = parseFloat(getComputedStyle(paginationRef.current).columnGap || "12");
-      const dotWidth = firstDot.offsetWidth;
-      const distance = index * (dotWidth + gap);
+      const gap = parseFloat(
+        getComputedStyle(paginationRef.current).columnGap || "12"
+      );
+      const dotWidth = dots[0].offsetWidth;
 
       gsap.to(activeDotRef.current, {
-        x: distance,
-        scaleX: 1, // shrink back after stretch
+        x: index * (dotWidth + gap),
+        scaleX: 1,
         duration: 0.35,
         ease: "power3.out",
       });
     }
   }, [index, totalSlides]);
 
+  /* ---------------- RENDER ---------------- */
   return (
     <div
       ref={overlayRef}
@@ -164,19 +202,24 @@ export default function ImageModal({
       onClick={onClose}
     >
       <div
-        className="relative w-[90vw] h-[80vh] bg-black rounded-lg overflow-hidden"
+        className="relative w-[90vw] max-w-[1200px] h-[80vh] bg-black rounded-lg overflow-hidden"
         onClick={(e) => e.stopPropagation()}
         onTouchStart={touchStart}
         onTouchMove={touchMove}
         onTouchEnd={touchEnd}
+        onMouseDown={mouseStart}
+        onMouseMove={mouseMove}
+        onMouseUp={mouseEnd}
+        onMouseLeave={mouseEnd}
+        style={{ cursor }}
       >
         <div
           ref={sliderRef}
-          className="flex h-full w-full"
+          className="flex h-full"
           style={{ width: `${totalSlides * 100}%` }}
         >
           {album.images.map((img) => (
-            <div key={img.id} className="relative flex-shrink-0 w-[90vw] h-full">
+            <div key={img.id} className="relative shrink-0 w-[90vw] h-full">
               <Image
                 src={img.image_url}
                 alt={album.title || "Project image"}
@@ -188,7 +231,6 @@ export default function ImageModal({
           ))}
         </div>
 
-        {/* Close */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-white/60 z-10"
@@ -197,23 +239,18 @@ export default function ImageModal({
         </button>
       </div>
 
-      {/* Pagination Dots */}
-      <div
-        className="relative flex gap-3  w-max"
-        ref={paginationRef}
-        style={{ height: 6 }}
-      >
+      {/* Pagination */}
+      <div ref={paginationRef} className="relative flex gap-3 mt-4">
         {album.images.map((_, i) => (
           <div key={i} className="w-2 h-2 rounded-full bg-white/30" />
         ))}
-        {/* Active indicator */}
         <div
           ref={activeDotRef}
           className="active-dot absolute top-0 left-0 w-2 h-2 rounded-full bg-white origin-center"
         />
       </div>
 
-      {/* Description Toggle */}
+      {/* Description */}
       {album.description && (
         <>
           <button

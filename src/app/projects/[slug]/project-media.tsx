@@ -79,19 +79,19 @@ export default function ProjectMedia({ project }: {project: Project}) {
       </div>
 
       {/* Title */}
-      <h1 className="text-white text-2xl mb-4 fade-in font-bold">{project.title}</h1>
+      <h1 className="text-white text-2xl tracking-tighter mb-4 fade-in font-bold">{project.title}</h1>
 
       {/* Description */}
       {project.description && (
         <div className="mb-6 max-w-xl">
           <p
             ref={descRef}
-            className="text-gray-400 fade-in overflow-hidden text-md md:text-lg"
+            className="text-gray-400 fade-in overflow-hidden leading-[1.6] text-[16px] md:text-lg"
             style={{ height: "3rem" }}
           >
             {project.description}
           </p>
-          <button onClick={toggleDescription} className="mt-1 text-sm text-gray-200">
+          <button onClick={toggleDescription} className="mt-1 cursor-pointer text-[16px] text-gray-200">
             {expandedDesc ? "See Less" : "See More"}
           </button>
         </div>
@@ -99,11 +99,11 @@ export default function ProjectMedia({ project }: {project: Project}) {
 
       {/* VIDEOS */}
       {hasVideos && (
-        <section className={`space-y-6 ${hasImages ? "mb-16" : "mb-0"}`}>
+        <section className={`space-y-6 md:w-full flex  justify-center ${hasImages ? "mb-16" : "mb-0"}`}>
           {project.videos.map((video) => (
             <div
               key={video.id}
-              className="relative w-full h-64 sm:h-80 sm:w-[500px] rounded-lg bg-black cursor-pointer fade-in overflow-hidden"
+              className="relative w-full h-64 md:h-80 md:w-150 rounded-lg bg-black cursor-pointer fade-in overflow-hidden"
               onClick={() => setActiveVideo(video)}
             >
               {/* Skeleton Loader */}
@@ -140,7 +140,7 @@ export default function ProjectMedia({ project }: {project: Project}) {
 
       {/* IMAGE ALBUMS */}
       {hasImages && (
-        <div className={`grid grid-cols-2 sm:grid-cols-3 gap-4 ${hasVideos ? "" : "mt-6"}`}>
+        <div className={`grid grid-cols-2 cursor-pointer sm:grid-cols-3 gap-4 ${hasVideos ? "" : "mt-6"}`}>
           {validImages.map((img, index: number) => (
             <button
               key={img.id}

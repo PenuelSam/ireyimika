@@ -1,4 +1,5 @@
 import { getProjectsWithMedia } from "@/src/lib/data/getProject";
+import { MdArrowBackIosNew } from "react-icons/md";
 import Link from "next/link";
 
 export default async function ProjectsPage() {
@@ -11,10 +12,17 @@ export default async function ProjectsPage() {
 
   return (
     <main className="min-h-screen bg-black px-6 pt-24 pb-32">
-      <div className="mb-12">
-        <h1 className="text-white text-4xl font-bold mb-4">Projects</h1>
-        <p className="text-gray-400 text-lg">Click on a project folder to explore</p>
-      </div>
+      <div className="mb-12 flex items-center  justify-between">
+  <Link
+    href="/"
+    className="text-gray-400 hover:text-white transition flex items-center gap-2"
+    aria-label="Back to home"
+  >
+    <MdArrowBackIosNew size={20} /> Back
+  </Link>
+
+  <h1 className="text-white text-3xl font-bold">All Projects</h1>
+</div>
 
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-6">
         {sortedProjects.map((project) => (
@@ -34,7 +42,7 @@ export default async function ProjectsPage() {
             </div>
 
             {/* Title */}
-            <p className="text-xs md:text-sm text-gray-400 text-center leading-tight mt-1">
+            <p className="text-sm tracking-tight text-gray-400 text-center leading-tight mt-1">
               {project.title}
             </p>
           </Link>

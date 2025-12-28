@@ -19,7 +19,7 @@ export default function InquirySection() {
     <section className="h-screen flex flex-col justify-center px-6 md:px-24 text-white">
       <h2 className="text-2xl md:text-4xl font-bold mb-1">INQUIRIES</h2>
 
-      <p className="text-gray-400 max-w-xl mb-10 text-sm md:text-md">
+      <p className="text-gray-400 max-w-xl mb-10 text-[16px]">
         For collaborations and inquiries, please select an option below:
       </p>
 

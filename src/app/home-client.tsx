@@ -34,8 +34,8 @@ export default function HomeClient({ projects}: { projects: ProjectItem[]}) {
       {/* Project Preview Section */}
 <section className="section flex-col justify-center px-6 md:px-24 mt-12">
   <div className="mb-12">
-    <h1 className="text-white text-[18px] font-bold mb-2 uppercase">Projects</h1>
-    <p className="text-gray-400 text-sm">Click on a project folder to explore</p>
+    <h1 className="text-white text-2xl md:text-4xl font-bold mb-1 uppercase">Projects</h1>
+    <p className="text-gray-400 text-[16px]">Click on a project folder to explore</p>
   </div>
   <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
     {previewProjects.map((project) => (
@@ -54,7 +54,7 @@ export default function HomeClient({ projects}: { projects: ProjectItem[]}) {
           <div className="absolute bottom-0 left-0 w-full h-1 bg-white/10 backdrop-blur-sm"></div>
         </div>
 
-        <p className="text-sm text-gray-400 text-center leading-tight mt-1">
+        <p className="text-[16px] text-gray-400 text-center leading-tight mt-1">
           {project.title}
         </p>
       </Link>
